@@ -29,14 +29,17 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       UserCredential _loggedInWorker = await signInWithGoogle();
 
+      //geeting workers collection
       QuerySnapshot _workerCollection =
           await _firestore.collection('workers').get();
 
+      //getting all documents from workers collection
       List<QueryDocumentSnapshot> _workerDocIDs =
           _workerCollection.docs.toList();
 
       bool _doesContain = false;
 
+      //checking if current workerID already exists in worker collection
       for (int i = 0; i < _workerDocIDs.length; i++) {
         if (_workerDocIDs[i].id == _loggedInWorker.user.uid) {
           _doesContain = true;
