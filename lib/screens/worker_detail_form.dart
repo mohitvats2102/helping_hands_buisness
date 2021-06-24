@@ -153,7 +153,7 @@ class _WorkerDetailFormState extends State<WorkerDetailForm> {
     final picker = ImagePicker();
     final image = await picker.getImage(
       source: imageSource,
-      imageQuality: 50,
+      imageQuality: 100,
       maxWidth: 150,
     );
     if (image == null) return;

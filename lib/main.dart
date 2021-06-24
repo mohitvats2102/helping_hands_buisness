@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:helping_hands_buisness/screens/bookings_screen.dart';
@@ -15,52 +14,51 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await Firebase.initializeApp();
-  runApp(MyApp());
-}
-
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
   final User _firebaseUser = FirebaseAuth.instance.currentUser;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  bool _doesContain = false;
+  if (_firebaseUser != null) {
+    bool _doesContain = false;
+    QuerySnapshot _workerCollection =
+        await _firestore.collection('workers').get();
+
+    //getting all documents from workers collection
+    List<QueryDocumentSnapshot> _workerDocIDs = _workerCollection.docs.toList();
+
+    //checking if current workerID already exists in worker collection
+    for (int i = 0; i < _workerDocIDs.length; i++) {
+      if (_workerDocIDs[i].id == _firebaseUser.uid) {
+        _doesContain = true;
+        break;
+      }
+    }
+
+    runApp(MyApp(doesContain: _doesContain));
+  } else
+    runApp(MyApp(doesContain: null));
+}
+
+class MyApp extends StatelessWidget {
+  bool doesContain;
+
+  MyApp({this.doesContain});
+  final User _firebaseUser = FirebaseAuth.instance.currentUser;
 
   Widget _firstWidget;
 
   @override
-  void didChangeDependencies() async {
-    if (_firebaseUser != null) {
-      QuerySnapshot _workerCollection =
-          await _firestore.collection('workers').get();
-
-      //getting all documents from workers collection
-      List<QueryDocumentSnapshot> _workerDocIDs =
-          _workerCollection.docs.toList();
-
-      _doesContain = false;
-
-      //checking if current workerID already exists in worker collection
-      for (int i = 0; i < _workerDocIDs.length; i++) {
-        if (_workerDocIDs[i].id == _firebaseUser.uid) {
-          _doesContain = true;
-          break;
-        }
-      }
-
-      if (_doesContain) setState(() {});
-    }
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    if (_firebaseUser == null || !_doesContain) {
-      _firstWidget = LoginScreen();
+    if (doesContain == null) {
+      if (_firebaseUser == null) {
+        _firstWidget = LoginScreen();
+      } else {
+        _firstWidget = WelcomeScreen();
+      }
     } else {
-      _firstWidget = WelcomeScreen();
+      if (!doesContain) {
+        _firstWidget = WorkerDetailForm();
+      } else {
+        _firstWidget = WelcomeScreen();
+      }
     }
     return MaterialApp(
       debugShowCheckedModeBanner: false,
