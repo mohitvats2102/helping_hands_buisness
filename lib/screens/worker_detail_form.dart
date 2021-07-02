@@ -53,7 +53,7 @@ class _WorkerDetailFormState extends State<WorkerDetailForm> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('Ok'),
+                  child: Text('OK'),
                 )
               ],
             ),
