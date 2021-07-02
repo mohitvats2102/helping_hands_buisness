@@ -33,8 +33,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                 fontSize: 20,
               ),
             ),
-            Container(
-              width: 200,
+            Expanded(
               child: Text(
                 detail,
                 style: TextStyle(
