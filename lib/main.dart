@@ -3,8 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:helping_hands_buisness/screens/about_us.dart';
 import 'package:helping_hands_buisness/screens/bookings_screen.dart';
 import 'package:helping_hands_buisness/screens/login_screen.dart';
+import 'package:helping_hands_buisness/screens/privacy_policy.dart';
 import 'package:helping_hands_buisness/screens/tabs_screen.dart';
 import 'package:helping_hands_buisness/screens/worker_detail_form.dart';
 import 'package:helping_hands_buisness/screens/worker_profile.dart';
@@ -77,6 +79,8 @@ class MyApp extends StatelessWidget {
         TabsScreen.tabScreen: (context) => TabsScreen(),
         WorkerProfileScreen.workerProfileScreen: (context) =>
             WorkerProfileScreen(),
+        AboutUs.aboutUs: (context) => AboutUs(),
+        PrivacyPolicy.privacyPolicy: (context) => PrivacyPolicy(),
       },
     );
   }
